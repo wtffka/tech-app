@@ -74,7 +74,7 @@ public class PostControllerTest {
     }
 
     @Test
-    public void getUserNegativeTest() throws Exception {
+    public void getPostNegativeTest() throws Exception {
         utils.regDefaultUser();
         utils.regIncorrectPost();
         final MockHttpServletResponse response = utils.perform(
