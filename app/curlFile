@@ -1,0 +1,74 @@
+1) Корневая страница приложения
+$ curl url http://localhost:5000
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:--  0:00:01 --:--:--     0curl: (6) Could not resolve host: url
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100    17  100    17    0     0    170      0 --:--:-- --:--:-- --:--:--   171Welcome to my app
+
+2) Создание пользователя
+$ curl -X POST -H "Content-type:application/json" http://localhost:5000/v1/users -d '{"username": "wtffka", "password": "123456"}'
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   129    0    85  100    44    435    225 --:--:-- --:--:-- --:--:--   664{"id":1,"username":"wtffka","createdAt":"2022-06-28T01:12:10.076+00:00","posts":null}
+
+3) Авторизация пользователя
+
+HP@LAPTOP-L8DICRAS MINGW64 ~
+$ curl -X POST -H "Content-type:application/json" http://localhost:5000/v1/login -d '{"username": "wtffka", "password": "123456"}'
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   199  100   155  100    44    569    161 --:--:-- --:--:-- --:--:--   734eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhcGkiLCJpYXQiOjE2NTYzNzg4NjEsInVzZXJuYW1lIjoid3RmZmthIiwiZXhwIjoxNjU2NDY1MjYxfQ.xmmxrB32D_3UR_s-ZUS6TwPH6xxBGX4D03UNPvCMNuw
+
+
+4) POST http://localhost:5000/v1/posts
+Входные параметры(с header Authorization)
+{
+    "message": "wtffka",
+    "shortUserDto": {
+        "username":"wtffka"
+    }
+}
+Выходные параметры
+{
+    "id": 1,
+    "message": "wtffka",
+    "createdAt": "2022-06-28T01:21:19.091+00:00"
+}
+
+5) GET http://localhost:5000/v1/users Просмотр всех пользователей header Authorization включен
+
+[
+    {
+        "id": 1,
+        "username": "wtffka",
+        "createdAt": "2022-06-28T01:12:10.076+00:00",
+        "posts": [
+            {
+                "id": 1,
+                "message": "wtffka",
+                "createdAt": "2022-06-28T01:21:19.091+00:00"
+            }
+        ]
+    }
+]
+
+6) POST http://localhost:5000/v1/users/1/history header Authorization включен
+Входные параметры
+{
+    "username": "wtffka",
+    "message": "history 1"
+}
+
+Выходные параметры
+[
+    {
+        "id": 1,
+        "message": "wtffka",
+        "createdAt": "2022-06-28T01:21:19.091+00:00"
+    }
+]
+
+
+
