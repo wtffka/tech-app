@@ -14,8 +14,6 @@ public class TestConstants {
     public static final String TEST_MESSAGE3 = "BILLY JEAN!";
     public static final ShortUserDto SHORT_USER_DTO = new ShortUserDto(TEST_USERNAME);
     public static final PostDto POST_DTO1 = new PostDto(TEST_MESSAGE1, SHORT_USER_DTO);
-    public static final PostDto POST_DTO2 = new PostDto(TEST_MESSAGE2, SHORT_USER_DTO);
-    public static final PostDto POST_DTO3 = new PostDto(TEST_MESSAGE3, SHORT_USER_DTO);
     public static final String BASE_URL_FOR_USER_CONTROLLER = "/v1/users";
     public static final String BASE_URL_FOR_POST_CONTROLLER = "/v1/posts";
     public static final String ID = "/{id}";

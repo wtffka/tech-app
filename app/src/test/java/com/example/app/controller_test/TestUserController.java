@@ -63,19 +63,13 @@ public class TestUserController {
     @Test
     public void getUserNegativeTest() throws Exception {
         utils.regDefaultUser();
-        final MockHttpServletResponse response = utils.perform(
+        utils.perform(
                         get(BASE_URL_FOR_USER_CONTROLLER))
-                .andExpect(status().isOk())
+                .andExpect(status().isUnauthorized())
                 .andReturn()
                 .getResponse();
-
-        final List<User> users = fromJson(response.getContentAsString(), new TypeReference<>() {
-
-        });
-
-        assertThat(users.size()).isEqualTo(1);
-
     }
+
 
     @Test
     public void doRegistrationOneUserTwiceTest() throws Exception {

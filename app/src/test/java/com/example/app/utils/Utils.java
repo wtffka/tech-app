@@ -2,6 +2,8 @@ package com.example.app.utils;
 
 import com.example.app.dto.PostDto;
 import com.example.app.dto.UserDto;
+import com.example.app.repository.PostRepository;
+import com.example.app.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,9 @@ import java.util.Map;
 
 import static com.example.app.utils.TestConstants.*;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @Component
@@ -44,19 +48,13 @@ public class Utils {
     private MockMvc mockMvc;
 
     @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
     private JWTHelper jwtHelper;
 
     public ResultActions regDefaultUser() throws Exception {
         return regUser(testUserDto);
-    }
-
-
-    public ResultActions regTestPostDto1() throws Exception {
-        return regPost(testPostDto);
-    }
-
-    public ResultActions regIncorrectPost() throws Exception {
-        return regPost(testPostDtoEmpty);
     }
 
     public ResultActions regIncorrectUser() throws Exception {
@@ -78,14 +76,6 @@ public class Utils {
         return perform(request);
     }
 
-    public ResultActions regPost(final PostDto postDto) throws Exception {
-        MockHttpServletRequestBuilder request = post(BASE_URL_FOR_POST_CONTROLLER)
-                .content(toJson(postDto))
-                .contentType(MediaType.APPLICATION_JSON);
-
-        return perform(request);
-    }
-
     public ResultActions authUser(final UserDto userDto) throws Exception {
         final MockHttpServletRequestBuilder request = post(BASE_URL_FOR_USER_AUTH)
                 .content(toJson(userDto))
@@ -94,12 +84,33 @@ public class Utils {
         return perform(request);
     }
 
+    public ResultActions regPost(final PostDto postDto) throws Exception {
+        final MockHttpServletRequestBuilder request = post(BASE_URL_FOR_POST_CONTROLLER)
+                .content(toJson(postDto))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        return perform(request, testUserDto.getUsername());
+    }
+
+    public ResultActions incorrectRegPost(final PostDto postDto) throws Exception {
+        final MockHttpServletRequestBuilder request = post(BASE_URL_FOR_POST_CONTROLLER)
+                .content(toJson(postDto))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        return perform(request);
+    }
+
+    public ResultActions getPost() throws Exception {
+        final MockHttpServletRequestBuilder request = get(BASE_URL_FOR_POST_CONTROLLER + ID, postRepository.findAll().get(0).getId());
+        return perform(request, testUserDto.getUsername());
+    }
+
     public ResultActions perform(final MockHttpServletRequestBuilder request) throws Exception {
         return mockMvc.perform(request);
     }
 
     public ResultActions perform(final MockHttpServletRequestBuilder request, final String username) throws Exception {
-        final String token = jwtHelper.expiring(Map.of("email", username));
+        final String token = jwtHelper.expiring(Map.of("username", username));
         request.header(AUTHORIZATION, token);
         return perform(request);
     }
